@@ -27,17 +27,14 @@ interface ContactForm {
     event.preventDefault();
     // Add a new contact
     console.log('form', JSON.stringify(form));
-    fetch('/api/contacts',{
-      method: 'post',
-      body: JSON.stringify(form),
-      headers: {'Content-Type': 'application/json'}
-    })
-    // Clear the form
+    addContact(form)
+      .then(data => setContacts([...contacts, data]));
+
     setForm({name: '', email: '', phone: ''});
   }
 
   // Function to handle input changes
-  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
     setForm({...form, [name]: value});
   }
@@ -67,6 +64,13 @@ interface ContactForm {
 
 const getContacts = (): Promise<Contact[]> => fetch('/api/contacts')
   .then(data => data.json())
+
+
+const addContact = (contact: ContactForm): Promise<Contact> => fetch('/api/contacts',{
+  method: 'post',
+  body: JSON.stringify(contact),
+  headers: {'Content-Type': 'application/json'}
+}).then(data => data.json())
 
 // Contacts.getInitialProps = async () => {
 //   // Load the contacts from a file
