@@ -20,8 +20,11 @@ const handleGet = (req: NextApiRequest, res: NextApiResponse) => {
 // Function to handle PUT requests
 const handlePost = (req: NextApiRequest, res: NextApiResponse) => {
   // Update a contact
-  const {id, name, email, phone} = req.body;
+  const id = (getContacts().length + 1).toString();
+  const {name, email, phone} = req.body;
+  console.log('name', name);
   const newContact = addContact(id, name, email, phone);
+  console.log('new contact', newContact);
   // Return the updated contact
   res.status(200).json(newContact);
 }
